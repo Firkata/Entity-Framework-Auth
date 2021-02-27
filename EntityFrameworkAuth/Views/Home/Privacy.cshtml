@@ -1,6 +1,80 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "CRUD Operations";
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateHotel" method="post">
+            <h4>Create Hotel</h4>
+            <hr />
+            <div class="form-group">
+                <label for="Name"></label>
+                <input type="text" name="Name" placeholder="Hotel name..." class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="Stars"></label>
+                <input type="number" name="Stars" placeholder="Stars" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Create Hotel</button>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <form asp-action="CreateRoom" method="post">
+            <h4>Create Room</h4>
+            <hr />
+            <div class="form-group">
+                <label for="Number"></label>
+                <input type="number" name="Number" placeholder="Room number..." class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="HotelId">Hotel</label>
+                <select asp-items="@(new SelectList(ViewBag.Hotels,"Id","Name"))" name="HotelId" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label for="IsBooked">IsBooked</label>
+                <input type="checkbox" name="IsBooked" placeholder="Is Booked" value="true" />
+            </div>
+            <button type="submit" class="btn btn-primary">Create Room</button>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <form asp-action="DeleteRoom" method="post">
+            <h4>Delete Room</h4>
+            <hr />
+            <div class="form-group">
+                <label for="RoomId">Select Room</label>
+                <select asp-items="@(new SelectList(ViewBag.Rooms,"Id","Number"))" name="RoomId" class="form-control"></select>
+            </div>
+            <button type="submit" class="btn btn-primary">Delete Room</button>
+        </form>
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col-md-4">
+        <form asp-action="DeleteHotel" method="post">
+            <h4>Delete Hotel</h4>
+            <hr />
+            <div class="form-group">
+                <label for="HotelId">Select Hotel</label>
+                <select asp-items="@(new SelectList(ViewBag.Hotels,"Id","Name"))" name="HotelId" class="form-control"></select>
+            </div>
+            <button type="submit" class="btn btn-primary">Delete Hotel</button>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <form asp-action="UpdateHotel" method="post">
+            <h4>Update Hotel</h4>
+            <hr />
+            <div class="form-group">
+                <label for="HotelId">Select Hotel</label>
+                <select asp-items="@(new SelectList(ViewBag.Hotels,"Id","Name"))" name="HotelId" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label for="Name">New name</label>
+                <input type="text" name="Name" placeholder="Hotel Name..." class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Update Hotel</button>
+        </form>
+    </div>
+</div>
