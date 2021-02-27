@@ -12,5 +12,8 @@ namespace EntityFrameworkAuth.Data
             : base(options)
         {
         }
+
+        public DbSet<HotelDataModel> Hotels { get; set; }
+        public DbSet<RoomDataModel> Rooms { get; set; }
     }
 }
