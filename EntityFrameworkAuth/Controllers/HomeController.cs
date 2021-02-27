@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using EntityFrameworkAuth.Models;
 using EntityFrameworkAuth.Data;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 namespace EntityFrameworkAuth.Controllers
 {
@@ -14,7 +17,6 @@ namespace EntityFrameworkAuth.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         protected ApplicationDbContext _context;
-
 
         public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
@@ -27,8 +29,12 @@ namespace EntityFrameworkAuth.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Privacy()
         {
+            ClaimsPrincipal currentUser = this.User;
+            var userData = _context.Users.Where(user => user.UserName == currentUser.Identity.Name).SingleOrDefault();
+
             var hotels = _context.Hotels.ToList();
             var rooms = _context.Rooms.ToList();
             ViewBag.Rooms = rooms;
@@ -52,7 +58,7 @@ namespace EntityFrameworkAuth.Controllers
             room.Number = number;
             room.IsBooked = isBooked;
 
-            var hotel = _context.Hotels.Where(hotel => hotel.Id == hotelId).Single();
+            var hotel = _context.Hotels.Where(hotel => hotel.Id == hotelId).SingleOrDefault();
 
             var rooms = new List<RoomDataModel>();
             rooms.Add(room);
@@ -66,7 +72,7 @@ namespace EntityFrameworkAuth.Controllers
 
         public IActionResult DeleteRoom(string roomId)
         {
-            var room = _context.Rooms.Where(room => room.Id == roomId).Single();
+            var room = _context.Rooms.Where(room => room.Id == roomId).SingleOrDefault();
 
             _context.Rooms.Remove(room);
             _context.SaveChanges();
@@ -76,7 +82,7 @@ namespace EntityFrameworkAuth.Controllers
 
         public IActionResult DeleteHotel(string hotelId)
         {
-            var hotel = _context.Hotels.Where(hotel => hotel.Id == hotelId).Single();
+            var hotel = _context.Hotels.Where(hotel => hotel.Id == hotelId).SingleOrDefault();
             var rooms = _context.Rooms.Where(room => room.HotelDataModelId == hotelId).ToList();
 
             foreach (var room in rooms)
@@ -92,7 +98,7 @@ namespace EntityFrameworkAuth.Controllers
 
         public IActionResult UpdateHotel(string hotelId, string name)
         {
-            var hotel = _context.Hotels.Where(hotel => hotel.Id == hotelId).Single();
+            var hotel = _context.Hotels.Where(hotel => hotel.Id == hotelId).SingleOrDefault();
 
             hotel.Name = name;
             _context.Hotels.Update(hotel);
